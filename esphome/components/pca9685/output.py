@@ -3,12 +3,11 @@ from esphome.components import output
 import esphome.config_validation as cv
 from esphome.const import CONF_CHANNEL, CONF_ID
 
-from . import PCA9685Output, pca9685_ns
+from . import CONF_PCA9685_ID, PCA9685Output, pca9685_ns
 
 DEPENDENCIES = ["pca9685"]
 
 PCA9685Channel = pca9685_ns.class_("PCA9685Channel", output.FloatOutput)
-CONF_PCA9685_ID = "pca9685_id"
 
 CONFIG_SCHEMA = output.FLOAT_OUTPUT_SCHEMA.extend(
     {

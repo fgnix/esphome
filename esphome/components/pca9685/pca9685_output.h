@@ -24,6 +24,7 @@ extern const uint8_t PCA9685_MODE_OUTNE_HIGHZ;
 extern const uint8_t PCA9685_MODE_OUTNE_LOW;
 
 class PCA9685Output;
+class PCA9685GPIOPin;
 
 class PCA9685Channel : public output::FloatOutput {
  public:
@@ -56,6 +57,7 @@ class PCA9685Output : public Component, public i2c::I2CDevice {
 
  protected:
   friend PCA9685Channel;
+  friend PCA9685GPIOPin;
 
   void set_channel_value_(uint8_t channel, uint16_t value) {
     if (this->pwm_amounts_[channel] != value)
