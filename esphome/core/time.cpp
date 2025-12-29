@@ -303,6 +303,22 @@ void ESPTime::increment_hour_local() {
   *this = ESPTime::from_epoch_local(this->timestamp);
 }
 
+void ESPTime::increment_day_local() {
+	const time_t old_timestamp = this->timestamp;
+	const time_t no_dst_changes_delta = 86400; // 1 day in seconds
+	this->increment_day();
+	this->recalc_timestamp_local();
+
+	// DST ended. The day when the DST ends has 1 extra hour thus the timestamp is greater
+	if (this->timestamp > old_timestamp + no_dst_changes_delta) {
+		this->is_dst = false;
+
+	// DST started. The day when the DST starts has 1 hour less, thus the timestamp is lower
+	} else if (this->timestamp < old_timestamp + no_dst_changes_delta) {
+		this->is_dst = true;
+	}
+}
+
 void ESPTime::recalc_timestamp_utc(bool use_day_of_year) {
   time_t res = 0;
   if (!this->fields_in_range()) {
