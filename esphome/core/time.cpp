@@ -284,6 +284,25 @@ void ESPTime::increment_minute_local() {
   *this = ESPTime::from_epoch_local(this->timestamp);
 }
 
+void ESPTime::increment_hour_local() {
+  this->increment_hour();
+
+  // https://en.wikipedia.org/wiki/Daylight_saving_time_by_country
+  // DST occurs only at minute 00 and second 00. But since we incremented by 3600 seconds for sure we did went
+  // through the second 0 and the minute 0
+
+  // DST happens, depending on the country, between 00 and 04 o'clock
+  if (this->hour > 4)
+    return;
+
+  // DST happens only on Friday, Saturday and Sundays
+  if (this->day_of_week > 1 && this->day_of_week <= 5)
+    return;
+
+  // Recompute the exact time from the timestamp, if a DST change MAY have occurred
+  *this = ESPTime::from_epoch_local(this->timestamp);
+}
+
 void ESPTime::recalc_timestamp_utc(bool use_day_of_year) {
   time_t res = 0;
   if (!this->fields_in_range()) {

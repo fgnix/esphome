@@ -131,6 +131,8 @@ struct ESPTime {
   void increment_second_local();
   /// Increment this clock instance by one minute. DST changes ARE taken into account. MUST be local time
   void increment_minute_local();
+  /// Increment this clock instance by one hour. DST changes ARE taken into account. MUST be local time
+  void increment_hour_local();
 
   bool operator<(const ESPTime &other) const;
   bool operator<=(const ESPTime &other) const;
