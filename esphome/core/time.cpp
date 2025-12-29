@@ -196,6 +196,13 @@ void ESPTime::recalc_timestamp_local() {
   this->timestamp = mktime(&tm);
 }
 
+void ESPTime::recalc_day_of_year() {
+  uint16_t res = 0;
+  for (int i = 1; i < this->month; i++)
+    res += days_in_month(i, this->year);
+  this->day_of_year = res + this->day_of_month;
+}
+
 int32_t ESPTime::timezone_offset() {
   time_t now = ::time(nullptr);
   struct tm local_tm = *::localtime(&now);

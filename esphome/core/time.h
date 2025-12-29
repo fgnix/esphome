@@ -108,6 +108,9 @@ struct ESPTime {
   /// Recalculate the timestamp field from the other fields of this ESPTime instance assuming local fields.
   void recalc_timestamp_local();
 
+  /// Recalculate the day_of_year field from the other fields of this ESPTime instance.
+  void recalc_day_of_year();
+
   /// Convert this ESPTime instance back to a tm struct.
   struct tm to_c_tm();
 
