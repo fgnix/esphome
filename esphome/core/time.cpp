@@ -141,6 +141,62 @@ void ESPTime::increment_second() {
   this->year++;
 }
 
+void ESPTime::increment_minute() {
+  this->timestamp += 60;
+
+  // second roll-over, increment minute
+  if (!increment_time_value(this->minute, 0, 60))
+    return;
+
+  // minute roll-over, increment hour
+  if (!increment_time_value(this->hour, 0, 24))
+    return;
+
+  // hour roll-over, increment day_of_week
+  increment_time_value(this->day_of_week, 1, 8);
+
+  // hour roll-over, increment day_of_year
+  const uint16_t days_in_year = (this->year % 4 == 0) ? 366 : 365;
+  increment_time_value(this->day_of_year, 1, days_in_year + 1);
+
+  // hour roll-over, increment day_of_month
+  if (!increment_time_value(this->day_of_month, 1, days_in_month(this->month, this->year) + 1))
+    return;
+
+  // day of month roll-over, increment month
+  if (!increment_time_value(this->month, 1, 13))
+    return;
+
+  // month roll-over, increment year
+  this->year++;
+}
+
+void ESPTime::increment_hour() {
+  this->timestamp += 3600;
+
+  // minute roll-over, increment hour
+  if (!increment_time_value(this->hour, 0, 24))
+    return;
+
+  // hour roll-over, increment day_of_week
+  increment_time_value(this->day_of_week, 1, 8);
+
+  // hour roll-over, increment day_of_year
+  const uint16_t days_in_year = (this->year % 4 == 0) ? 366 : 365;
+  increment_time_value(this->day_of_year, 1, days_in_year + 1);
+
+  // hour roll-over, increment day_of_month
+  if (!increment_time_value(this->day_of_month, 1, days_in_month(this->month, this->year) + 1))
+    return;
+
+  // day of month roll-over, increment month
+  if (!increment_time_value(this->month, 1, 13))
+    return;
+
+  // month roll-over, increment year
+  this->year++;
+}
+
 void ESPTime::increment_day() {
   this->timestamp += 86400;
 

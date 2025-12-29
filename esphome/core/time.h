@@ -116,10 +116,15 @@ struct ESPTime {
 
   static int32_t timezone_offset();
 
-  /// Increment this clock instance by one second.
+  /// Increment this clock instance by one second. DST changes are NOT taken into account (use with UTC time)
   void increment_second();
-  /// Increment this clock instance by one day.
+  /// Increment this clock instance by one minute. DST changes are NOT taken into account (use with UTC time)
+  void increment_minute();
+  /// Increment this clock instance by one hour. DST changes are NOT taken into account (use with UTC time)
+  void increment_hour();
+  /// Increment this clock instance by one day. DST changes are NOT taken into account (use with UTC time)
   void increment_day();
+
   bool operator<(const ESPTime &other) const;
   bool operator<=(const ESPTime &other) const;
   bool operator==(const ESPTime &other) const;
