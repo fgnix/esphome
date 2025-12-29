@@ -122,37 +122,45 @@ void ESPTime::increment_second() {
   if (!increment_time_value(this->hour, 0, 24))
     return;
 
-  // hour roll-over, increment day
+  // hour roll-over, increment day_of_week
   increment_time_value(this->day_of_week, 1, 8);
 
-  if (increment_time_value(this->day_of_month, 1, days_in_month(this->month, this->year) + 1)) {
-    // day of month roll-over, increment month
-    increment_time_value(this->month, 1, 13);
-  }
+  // hour roll-over, increment day_of_year
+  const uint16_t days_in_year = (this->year % 4 == 0) ? 366 : 365;
+  increment_time_value(this->day_of_year, 1, days_in_year + 1);
 
-  uint16_t days_in_year = (this->year % 4 == 0) ? 366 : 365;
-  if (increment_time_value(this->day_of_year, 1, days_in_year + 1)) {
-    // day of year roll-over, increment year
-    this->year++;
-  }
+  // hour roll-over, increment day_of_month
+  if (!increment_time_value(this->day_of_month, 1, days_in_month(this->month, this->year) + 1))
+    return;
+
+  // day of month roll-over, increment month
+  if (!increment_time_value(this->month, 1, 13))
+    return;
+
+  // month roll-over, increment year
+  this->year++;
 }
 
 void ESPTime::increment_day() {
   this->timestamp += 86400;
 
-  // increment day
+  // increment day_of_week
   increment_time_value(this->day_of_week, 1, 8);
 
-  if (increment_time_value(this->day_of_month, 1, days_in_month(this->month, this->year) + 1)) {
-    // day of month roll-over, increment month
-    increment_time_value(this->month, 1, 13);
-  }
+  // increment day_of_year
+  const uint16_t days_in_year = (this->year % 4 == 0) ? 366 : 365;
+  increment_time_value(this->day_of_year, 1, days_in_year + 1);
 
-  uint16_t days_in_year = (this->year % 4 == 0) ? 366 : 365;
-  if (increment_time_value(this->day_of_year, 1, days_in_year + 1)) {
-    // day of year roll-over, increment year
-    this->year++;
-  }
+  // increment day_of_month
+  if (!increment_time_value(this->day_of_month, 1, days_in_month(this->month, this->year) + 1))
+    return;
+
+  // day of month roll-over, increment month
+  if (!increment_time_value(this->month, 1, 13))
+    return;
+
+  // month roll-over, increment year
+  this->year++;
 }
 
 void ESPTime::recalc_timestamp_utc(bool use_day_of_year) {
