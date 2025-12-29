@@ -219,6 +219,30 @@ void ESPTime::increment_day() {
   this->year++;
 }
 
+void ESPTime::increment_week() {
+  this->timestamp += 86400 * 7;
+
+  // increment day_of_year
+  const uint16_t days_in_current_year = (this->year % 4 == 0) ? 366 : 365;
+  this->day_of_year += 7;
+  if (this->day_of_year > days_in_current_year)
+    this->day_of_year -= days_in_current_year;
+
+  // increment day_of_month
+  const uint8_t days_in_current_month = days_in_month(this->month, this->year);
+  this->day_of_month += 7;
+  if (this->day_of_month <= days_in_current_month)
+    return;
+  this->day_of_month -= days_in_current_month;
+
+  // day of month roll-over, increment month
+  if (!increment_time_value(this->month, 1, 13))
+    return;
+
+  // month roll-over, increment year
+  this->year++;
+}
+
 void ESPTime::recalc_timestamp_utc(bool use_day_of_year) {
   time_t res = 0;
   if (!this->fields_in_range()) {

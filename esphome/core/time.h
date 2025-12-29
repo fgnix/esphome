@@ -124,6 +124,8 @@ struct ESPTime {
   void increment_hour();
   /// Increment this clock instance by one day. DST changes are NOT taken into account (use with UTC time)
   void increment_day();
+  /// Increment this clock instance by one week (7 days). DST changes are NOT taken into account (use with UTC time)
+  void increment_week();
 
   bool operator<(const ESPTime &other) const;
   bool operator<=(const ESPTime &other) const;
